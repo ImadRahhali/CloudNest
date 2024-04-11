@@ -4,7 +4,6 @@ import SignIn from './SignIn';
 
 function AuthPage() {
     return (
-
         <div>
       <SignUp />
       <SignIn />

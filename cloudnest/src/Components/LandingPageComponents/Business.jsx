@@ -1,7 +1,7 @@
 import { features } from "../../constants";
 import styles, { layout } from "../../style";
 import Button from "./Button";
-
+import { Link } from "react-router-dom";
 const FeatureCard = ({ icon, title, content, index }) => (
   <div className={`flex flex-row p-6 rounded-[20px] ${index !== features.length - 1 ? "mb-6" : "mb-0"} feature-card`}>
     <div className={`w-[64px] h-[64px] rounded-full ${styles.flexCenter} bg-dimBlue`}>
@@ -29,7 +29,7 @@ const Business = () =>  (
       Our user-friendly interface is designed for simplicity, offering intuitive navigation and a clean layout that enhances usability,  managing your data becomes effortless and efficient.
       </p>
 
-      <Button styles={`mt-10`} />
+      <Link to={`/auth`}><Button styles={`mt-10`} /></Link>
     </div>
 
     <div className={`${layout.sectionImg} flex-col`}>

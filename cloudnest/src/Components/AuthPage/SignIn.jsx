@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { auth } from '../firebase';
+import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { Link } from 'react-router-dom';
 
 
 function SignIn() {
@@ -39,7 +40,8 @@ signInWithEmailAndPassword(auth, email, password)
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Sign In</button>
+        <Link to ="/feed">
+        <button type="submit">Sign In</button></Link>
       </form>
     </div>
   );

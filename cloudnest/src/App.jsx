@@ -1,32 +1,32 @@
-import styles from "./style";
-import { Business,CTA, Footer, Navbar, Stats, Testimonials, Hero } from "./Components/LandingPage";
-import Pricing from "./Components/LandingPage/Pricing";
+import LandingPage from "./Components/LandingPage";
+import {createBrowserRouter} from "react-router-dom";
+import ErrorPage from "./Components/ErrorPage";
+import AuthPage from "./Components/AuthPage/AuthPage";
+import Feed from "./Components/Feed";
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPage />,
+    errorElement: <ErrorPage />,
 
-const App = () => (
-  <div className="bg-primary w-full overflow-hidden">
-    <div className={`${styles.paddingX} ${styles.flexCenter}`}>
-      <div className={`${styles.boxWidth}`}>
-        <Navbar />
-      </div>
-    </div>
+  },
+  {
+    path: "/auth",
+    element: <AuthPage />,
+    errorElement: <ErrorPage />,
 
-    <div className={`bg-primary ${styles.flexStart}`}>
-      <div className={`${styles.boxWidth}`}>
-        <Hero />
-      </div>
-    </div>
-    
-    <div className={`bg-primary ${styles.paddingX} ${styles.flexCenter}`}>
-      <div className={`${styles.boxWidth}`}>
-        <Stats />
-        <Business />
-        <Pricing /> 
-        <Testimonials />
-        <CTA />
-        <Footer />
-      </div>
-    </div>
-  </div>
-);
+  },
+  {
+    path: "/feed",
+    element: <Feed/>,
+    errorElement: <ErrorPage />,
 
-export default App;
+  },
+
+
+]);
+
+
+export default router;
+
+
