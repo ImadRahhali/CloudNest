@@ -29,7 +29,7 @@ export const features = [
     icon: star,
     title: "Plans",
     content:
-      "Different plans for you based on your need of our cloud storage.",
+      "We offer different plans and pricings for you based on your needs of our cloud storage service.",
   },
   {
     id: "feature-2",
