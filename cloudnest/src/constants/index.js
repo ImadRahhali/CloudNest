@@ -1,5 +1,9 @@
-import { people01, people02, people03, facebook, instagram, linkedin, twitter, airbnb, binance, coinbase, dropbox, send, shield, star  } from "../assets";
-
+import { people01, people02, people03, facebook, instagram, linkedin, twitter,send, shield, star  } from "../assets";
+import LockIcon from '@mui/icons-material/Lock';
+import StorageIcon from '@mui/icons-material/Storage';
+import BackupIcon from '@mui/icons-material/Backup';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 export const navLinks = [
   {
     id: "home",
@@ -10,12 +14,12 @@ export const navLinks = [
     title: "Features",
   },
   {
-    id: "product",
-    title: "Product",
+    id: "plans",
+    title: "Plans",
   },
   {
-    id: "clients",
-    title: "Clients",
+    id: "testimonials",
+    title: "Testimonials",
   },
 ];
 
@@ -47,26 +51,70 @@ export const feedback = [
   {
     id: "feedback-1",
     content:
-      "Money is only a tool. It will take you wherever you wish, but it will not replace you as the driver.",
-    name: "Herman Jensen",
-    title: "Founder & Leader",
+      "Using CloudNest has made managing our files a breeze. The interface is intuitive, and the features are exactly what we need. Highly recommended!",
+    name: " Emily S.",
+    title: "Digital Marketing Manager",
     img: people01,
   },
   {
     id: "feedback-2",
     content:
-      "Money makes your life easier. If you're lucky to have it, you're lucky.",
-    name: "Steve Mark",
-    title: "Founder & Leader",
-    img: people02,
+      "I've tried several cloud storage platforms, and CloudNest stands out for its security and ease of use. Uploading and sharing files has never been easier!",
+    name: "John M.",
+    title: "Freelance Photographer",
+    img: people03,
   },
   {
     id: "feedback-3",
     content:
-      "It is usually people in the money business, finance, and international trade that are really rich.",
-    name: "Kenn Gallagher",
-    title: "Founder & Leader",
-    img: people03,
+      "CloudNest has become an essential tool for our team. The collaboration features are fantastic, and the pricing plans are reasonable. Great job!",
+    name: "Sarah L.",
+    title: "Project Manager",
+    img: people02,
+  },
+];
+export const plans = [
+  {
+    id: "plan-1",
+    title: "Free Plan",
+    
+  },
+  {
+    id: "plan-2",
+    title: "CloudNest PLUS",
+    
+  },
+  {
+    id: "plan-3",
+    title: "CloudNest SUPER",
+    
+  },
+];
+export const plansicons = [
+  {
+    id: "icon-1",
+    icon: StorageIcon,
+    
+  },
+  {
+    id: "icon-2",
+    icon: BackupIcon,
+    
+  },
+  {
+    id: "icon-3",
+    icon: LockIcon,
+    
+  },
+  {
+    id: "icon-4",
+    icon: SpaceDashboardIcon,
+    
+  },
+  {
+    id: "icon-5",
+    icon: SupportAgentIcon,
+    
   },
 ];
 
@@ -177,21 +225,3 @@ export const socialMedia = [
   },
 ];
 
-export const clients = [
-  {
-    id: "client-1",
-    logo: airbnb,
-  },
-  {
-    id: "client-2",
-    logo: binance,
-  },
-  {
-    id: "client-3",
-    logo: coinbase,
-  },
-  {
-    id: "client-4",
-    logo: dropbox,
-  },
-];

@@ -17,7 +17,9 @@
 * {
   scroll-behavior: smooth;
 }
-
+.text-custom-blue {
+  color: #00498D;
+}
 .text-gradient {
   background: radial-gradient(
     64.18% 64.18% at 71.16% 35.69%,
@@ -118,6 +120,16 @@
 
 .feedback-card {
   background: transparent;
+  
+}
+.plan-card {
+  background: transparent;
+  background: var(--black-gradient);
+  box-shadow: var(--card-shadow);
+  
+}
+.plan-container .plan-card:last-child {
+  margin-right: 0px;
 }
 
 .feedback-card:hover {
