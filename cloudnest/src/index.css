@@ -57,6 +57,27 @@
   );
 }
 
+.bg-black-gradient2 {
+  background: linear-gradient(
+    144.39deg,
+    #0f1042 -278.56%,
+    #0a0d36 -78.47%,
+    #05081c 91.61%
+  );
+  opacity: 5;
+}
+.bgPrimary {
+  background: radial-gradient(
+    at center center,
+    #30353b 0.89%,
+    #1a1f24 17.23%,
+    #1b1b1f 42.04%,
+    #0f0f0f 55.12%,
+    #000000 81.54%,
+    #000000 100%
+  );
+}
+
 .bg-black-gradient-2 {
   background: linear-gradient(
     -168.39deg,
@@ -73,6 +94,7 @@
     #0a0d36 95.11%
   );
 }
+
 
 .bg-discount-gradient {
   background: linear-gradient(125.17deg, #00264D 0%, #0a0d36 100%);
