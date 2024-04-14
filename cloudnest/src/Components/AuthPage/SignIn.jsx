@@ -4,7 +4,6 @@ import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { facebooklogin } from "../../assets";
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
-import PersonIcon from '@mui/icons-material/Person';
 import "./authCss.css"
 function SignIn({ switchToSignUp }) {
   const [email, setEmail] = useState('');
@@ -16,6 +15,7 @@ function SignIn({ switchToSignUp }) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log("user logged : ", userCredential.user)
+        console.log("username ", auth.currentUser.displayName);
       })
       .catch((error) => {
         setError(error.message);
@@ -79,7 +79,7 @@ function SignIn({ switchToSignUp }) {
     </button>
 </div>
 <button class="social-b mb-2" onClick={handleFacebookSignIn}>
-    <img src={facebooklogin} class="h-6 w-6 mr-2" />
+    <img src={facebooklogin} alt='facebookIcon' class="h-6 w-6 mr-2" />
     <span>Login with Facebook</span>
 </button>
       </div >
