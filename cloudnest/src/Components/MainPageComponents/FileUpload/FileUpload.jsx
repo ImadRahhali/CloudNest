@@ -2,21 +2,24 @@ import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
-const FileUpload = ({ files, setFiles }) => {
+const FileUpload = () => {
   const auth = getAuth();
   const storage = getStorage();
   const [uploading, setUploading] = useState(false);
-  const handleFileUpload = async (file) => {
+  const handleFileUpload = async (event) => {
     try {
       setUploading(true);
       const user = auth.currentUser;
       if (!user) throw new Error("User not authenticated.");
 
+      const file = event.target.files[0]; // Get the uploaded file from event
+
+      if (!file) return; // Check if file is not null
+
       const storageRef = ref(storage, `files/${user.uid}/${file.name}`);
       await uploadBytes(storageRef, file);
 
       // Update files state to include the newly uploaded file
-      setFiles((oldFileNames) => [...oldFileNames, file.name]);
       console.log("File uploaded:", file.name);
     } catch (error) {
       console.error("Error uploading file:", error);

@@ -23,11 +23,11 @@ import { FiDownload, FiTrash2, FiShare2 } from "react-icons/fi"; // Import commo
 import { MdLink } from "react-icons/md"; // Import icon for link
 import { IconContext } from "react-icons"; // Import IconContext for icon styling
 
-const ListFiles = ({ files, setFiles }) => {
+const ListFiles = () => {
   const auth = getAuth();
   const storage = getStorage();
   const [copied, setCopied] = useState(false); // State to track if the link is copied
-
+  const [files, setFiles] = useState([]);
   useEffect(() => {
     const fetchFiles = async () => {
       try {
@@ -98,6 +98,9 @@ const ListFiles = ({ files, setFiles }) => {
 
   // Function to render file icon based on file extension
   const renderFileIcon = (fileName) => {
+    if (!fileName) {
+      fileName = "DefaultName";
+    }
     const extension = fileName.split(".").pop().toLowerCase();
     switch (extension) {
       case "pdf":
