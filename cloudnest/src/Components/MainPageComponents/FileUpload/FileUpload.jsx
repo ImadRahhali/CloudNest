@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
-const FileUpload = () => {
+const FileUpload = ({ Rerender }) => {
   const auth = getAuth();
   const storage = getStorage();
   const [uploading, setUploading] = useState(false);
@@ -21,6 +21,7 @@ const FileUpload = () => {
 
       // Update files state to include the newly uploaded file
       console.log("File uploaded:", file.name);
+      Rerender();
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {

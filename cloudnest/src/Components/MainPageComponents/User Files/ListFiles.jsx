@@ -23,12 +23,13 @@ import { FiDownload, FiTrash2, FiShare2 } from "react-icons/fi"; // Import commo
 import { MdLink } from "react-icons/md"; // Import icon for link
 import { IconContext } from "react-icons"; // Import IconContext for icon styling
 
-const ListFiles = () => {
+const ListFiles = ({ shouldRerender }) => {
   const auth = getAuth();
   const storage = getStorage();
   const [copied, setCopied] = useState(false); // State to track if the link is copied
   const [files, setFiles] = useState([]);
   useEffect(() => {
+    console.log("re-rendering list files component");
     const fetchFiles = async () => {
       try {
         const user = auth.currentUser;
@@ -44,7 +45,7 @@ const ListFiles = () => {
     };
 
     fetchFiles();
-  }, [auth, storage]);
+  }, [auth, storage, shouldRerender]);
 
   const handleDownload = async (fileName) => {
     try {

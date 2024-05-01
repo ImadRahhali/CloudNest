@@ -5,7 +5,18 @@ import ListFiles from "../Components/MainPageComponents/User Files/ListFiles";
 import { useState } from "react";
 
 const Main = () => {
-  const [files, setFiles] = useState([]);
+  const [shouldRerender, setShouldRerender] = useState(false);
+  const Rerender = (filename) => {
+    setTimeout(() => {
+      setShouldRerender(!shouldRerender);
+    }, 6000);
+    console.log(
+      "File Uploaded From Main.jsx :",
+      filename,
+      " Should rerender =",
+      shouldRerender
+    );
+  };
   return (
     <div className="flex w-full h-screen">
       {/* Sidebar */}
@@ -17,12 +28,12 @@ const Main = () => {
       <div className="flex-grow flex flex-col">
         {/* File Upload */}
         <div className="w-full p-4 bg-gray-100 border-b border-gray-300">
-          <FileUpload files={files} setFiles={setFiles} />
+          <FileUpload onMouseEnter={Rerender} Rerender={Rerender} />
         </div>
 
         {/* List Files */}
         <div className="flex-grow p-4 overflow-y-auto bg-gray-50">
-          <ListFiles files={files} setFiles={setFiles} />
+          <ListFiles shouldRerender={shouldRerender} />
         </div>
       </div>
     </div>
