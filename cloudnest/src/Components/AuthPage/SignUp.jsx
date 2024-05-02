@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { auth, googleProvider, facebookProvider, firestore } from '../../firebase'; 
 import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
-import { addDoc, query, where, collection, getDocs } from "firebase/firestore"; 
+import {setDoc,doc, addDoc, query, where, collection, getDocs } from "firebase/firestore"; 
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
@@ -21,16 +21,19 @@ function SignUp({ switchToSignIn }) {
         setError('Username is already taken');
         return;
       }
-
+  
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(auth.currentUser, { displayName: username });
-      const docRef = await addDoc(collection(firestore, "users"), {
+
+      const user = userCredential.user;
+      const docRef = await setDoc(doc(firestore, "users", user.uid), {
         username: username,
         email: email,
         provider: "email/password",
       });
-      console.log("Document written with ID: ", docRef.id);
-      console.log("User signed up:", userCredential.user);
+  
+      console.log("Document written with ID: ", user.uid);
+      console.log("User signed up:", user);
       console.log("Username:", auth.currentUser.displayName);
     } catch (error) {
       if (error.message.includes('password')) {
@@ -64,7 +67,8 @@ function SignUp({ switchToSignIn }) {
       }
       const usernameToSet = suggestedUsername(result.user);
       await updateProfile(auth.currentUser, { displayName: usernameToSet });
-      const docRef = await addDoc(collection(firestore, "users"), {
+      const user = result.user;
+      const docRef =  await setDoc(doc(firestore, "users", user.uid), {
         username: usernameToSet,
         email: email,
         provider: "google",

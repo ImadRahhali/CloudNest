@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { auth, googleProvider, facebookProvider } from '../../firebase';
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { facebooklogin } from "../../assets";
+import {useNavigate } from 'react-router-dom';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import "./authCss.css"
@@ -9,13 +10,18 @@ function SignIn({ switchToSignUp }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
+  
   const handleSignIn = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log("user logged : ", userCredential.user)
         console.log("username ", auth.currentUser.displayName);
+        const user = userCredential.user;
+        localStorage.setItem('user', JSON.stringify(user));
+        navigate('/profile');
       })
       .catch((error) => {
         setError(error.message);
@@ -26,6 +32,9 @@ function SignIn({ switchToSignUp }) {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         console.log("user logged with Google: ", result.user);
+        const user = result.user;
+        localStorage.setItem('user', JSON.stringify(user));
+        navigate('/profile');
       })
       .catch((error) => {
         setError(error.message);
@@ -36,6 +45,9 @@ function SignIn({ switchToSignUp }) {
     signInWithPopup(auth, facebookProvider)
       .then((result) => {
         console.log("user logged with Facebook: ", result.user);
+        const user = result.user;
+        localStorage.setItem('user', JSON.stringify(user));
+        navigate('/profile');
       })
       .catch((error) => {
         setError(error.message);
