@@ -4,6 +4,7 @@ import ErrorPage from "./Components/ErrorPage";
 import AuthPage from "./Components/AuthPage/AuthPage";
 import Main from "./Pages/Main";
 import FileUpload from "./Components/MainPageComponents/FileUpload/FileUpload";
+import Test from "./Test";
 const router = createBrowserRouter([
   {
     path: "/",

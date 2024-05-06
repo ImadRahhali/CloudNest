@@ -9,7 +9,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import {
-  FaFile,
+  FaFolder,
   FaFilePdf,
   FaFileWord,
   FaFileExcel,
@@ -18,41 +18,61 @@ import {
   FaFileAudio,
   FaFileVideo,
   FaFileAlt,
-} from "react-icons/fa"; // Import specific file icons
-import { FiDownload, FiTrash2, FiShare2 } from "react-icons/fi"; // Import common icons for download, trash, and share
-import { MdLink } from "react-icons/md"; // Import icon for link
-import { IconContext } from "react-icons"; // Import IconContext for icon styling
+} from "react-icons/fa";
+import { FiDownload, FiTrash2, FiFolderPlus, FiArrowUp } from "react-icons/fi";
+import { MdLink } from "react-icons/md";
+import { IconContext } from "react-icons";
 
-const ListFiles = ({ shouldRerender }) => {
+const ListFiles = ({ shouldRerender, currentPath, setCurrentPath }) => {
   const auth = getAuth();
   const storage = getStorage();
-  const [copied, setCopied] = useState(false); // State to track if the link is copied
+  const [copied, setCopied] = useState(false);
   const [files, setFiles] = useState([]);
+
   useEffect(() => {
-    console.log("re-rendering list files component");
     const fetchFiles = async () => {
       try {
         const user = auth.currentUser;
         if (!user) throw new Error("User not authenticated.");
 
-        const storageRef = ref(storage, `files/${user.uid}`);
+        const storageRef = ref(storage, `files/${user.uid}/${currentPath}`);
         const fileList = await listAll(storageRef);
-        const fileNames = fileList.items.map((item) => item.name);
-        setFiles(fileNames);
+        const fileNames = fileList.items.map((item) => ({
+          name: item.name,
+          type: "file",
+        }));
+        const folderNames = fileList.prefixes.map((prefix) => ({
+          name: prefix.name,
+          type: "folder",
+        }));
+
+        setFiles([...folderNames, ...fileNames]);
       } catch (error) {
         console.error("Error fetching files:", error);
       }
     };
 
     fetchFiles();
-  }, [auth, storage, shouldRerender]);
+  }, [auth, storage, shouldRerender, currentPath]);
+
+  const handleNavigate = (folderName) => {
+    setCurrentPath((prevPath) => `${prevPath}${folderName}/`);
+  };
+
+  const navigateUp = () => {
+    const newPath = currentPath.split("/").slice(0, -2).join("/") + "/";
+    setCurrentPath(newPath);
+  };
 
   const handleDownload = async (fileName) => {
     try {
       const user = auth.currentUser;
       if (!user) throw new Error("User not authenticated.");
 
-      const fileRef = ref(storage, `files/${user.uid}/${fileName}`);
+      const fileRef = ref(
+        storage,
+        `files/${user.uid}/${currentPath}${fileName}`
+      );
       const url = await getDownloadURL(fileRef);
       window.open(url, "_blank");
     } catch (error) {
@@ -65,44 +85,46 @@ const ListFiles = ({ shouldRerender }) => {
       const user = auth.currentUser;
       if (!user) throw new Error("User not authenticated.");
 
-      const fileRef = ref(storage, `files/${user.uid}/${fileName}`);
+      const fileRef = ref(
+        storage,
+        `files/${user.uid}/${currentPath}${fileName}`
+      );
       const url = await getDownloadURL(fileRef);
 
-      // Copy file URL to clipboard
       await navigator.clipboard.writeText(url);
-
-      // Set copied state to true to display the copied message
       setCopied(true);
-
-      // Reset copied state after 3 seconds
-      setTimeout(() => {
-        setCopied(false);
-      }, 3000);
+      setTimeout(() => setCopied(false), 3000);
     } catch (error) {
       console.error("Error sharing file:", error);
     }
   };
 
-  const handleRemove = async (fileName) => {
+  const handleRemove = async (file) => {
     try {
       const user = auth.currentUser;
       if (!user) throw new Error("User not authenticated.");
 
-      const fileRef = ref(storage, `files/${user.uid}/${fileName}`);
+      const fileRef = ref(
+        storage,
+        `files/${user.uid}/${currentPath}${file.name}`
+      );
+      if (file.type === "folder") {
+        // Delete folder and all its contents
+        const fileList = await listAll(fileRef);
+        await Promise.all(fileList.items.map((item) => deleteObject(item)));
+      }
       await deleteObject(fileRef);
-      setFiles((prevFiles) => prevFiles.filter((file) => file !== fileName));
-      console.log("File removed:", fileName);
+      setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
     } catch (error) {
-      console.error("Error removing file:", error);
+      console.error("Error removing file or folder:", error);
     }
   };
 
-  // Function to render file icon based on file extension
-  const renderFileIcon = (fileName) => {
-    if (!fileName) {
-      fileName = "DefaultName";
+  const renderFileIcon = (file) => {
+    if (file.type === "folder") {
+      return <FaFolder />;
     }
-    const extension = fileName.split(".").pop().toLowerCase();
+    const extension = file.name.split(".").pop().toLowerCase();
     switch (extension) {
       case "pdf":
         return <FaFilePdf />;
@@ -134,32 +156,55 @@ const ListFiles = ({ shouldRerender }) => {
 
   return (
     <div className="max-w-screen-md mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Your Files</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Your Files</h2>
+        <div>
+          {currentPath && (
+            <button
+              onClick={navigateUp}
+              className="btn btn-secondary flex items-center space-x-1"
+            >
+              <FiArrowUp size="1.5em" />
+              <span>Go Up</span>
+            </button>
+          )}
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-4">
-        {files.map((fileName, index) => (
+        {files.map((file, index) => (
           <div
-            key={index}
+            key={`file-${index}`}
             className="flex items-center border-b border-gray-200 py-2"
           >
             <IconContext.Provider
               value={{ size: "1.5rem", className: "text-gray-600 mr-4" }}
             >
-              {renderFileIcon(fileName)}
+              {renderFileIcon(file)}
             </IconContext.Provider>
-            <span className="truncate flex-grow">{fileName}</span>
+            <span className="truncate flex-grow">{file.name}</span>
             <div className="ml-4">
-              <FiDownload
-                className="text-gray-400 cursor-pointer hover:text-gray-600 mr-2"
-                onClick={() => handleDownload(fileName)}
-              />
-              <MdLink
-                className="text-gray-400 cursor-pointer hover:text-gray-600 mr-2"
-                onClick={() => handleShare(fileName)}
-              />
-              <FiTrash2
-                className="text-gray-400 cursor-pointer hover:text-gray-600"
-                onClick={() => handleRemove(fileName)}
-              />
+              {file.type === "file" && (
+                <>
+                  <FiDownload
+                    className="text-gray-400 cursor-pointer hover:text-gray-600 mr-2"
+                    onClick={() => handleDownload(file.name)}
+                  />
+                  <MdLink
+                    className="text-gray-400 cursor-pointer hover:text-gray-600 mr-2"
+                    onClick={() => handleShare(file.name)}
+                  />
+                  <FiTrash2
+                    className="text-gray-400 cursor-pointer hover:text-gray-600"
+                    onClick={() => handleRemove(file)}
+                  />
+                </>
+              )}
+              {file.type === "folder" && (
+                <FiFolderPlus
+                  className="text-gray-400 cursor-pointer hover:text-gray-600"
+                  onClick={() => handleNavigate(file.name)}
+                />
+              )}
             </div>
           </div>
         ))}

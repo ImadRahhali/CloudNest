@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
-const FileUpload = ({ Rerender }) => {
+const FileUpload = ({ Rerender, currentPath }) => {
   const auth = getAuth();
   const storage = getStorage();
   const [uploading, setUploading] = useState(false);
@@ -16,7 +16,10 @@ const FileUpload = ({ Rerender }) => {
 
       if (!file) return; // Check if file is not null
 
-      const storageRef = ref(storage, `files/${user.uid}/${file.name}`);
+      const storageRef = ref(
+        storage,
+        `files/${user.uid}${currentPath}${file.name}`
+      );
       await uploadBytes(storageRef, file);
 
       // Update files state to include the newly uploaded file

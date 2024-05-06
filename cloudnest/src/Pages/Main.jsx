@@ -3,9 +3,12 @@ import Sidebar from "../Components/MainPageComponents/SideBar/Sidebar";
 import FileUpload from "../Components/MainPageComponents/FileUpload/FileUpload";
 import ListFiles from "../Components/MainPageComponents/User Files/ListFiles";
 import { useState } from "react";
+import UploadFileModal from "../Components/Modals/Upload File modal/UploadFileModal";
+import CreateFolderModal from "../Components/Modals/Create Folder Modal/CreateFolderModal";
 
 const Main = () => {
   const [shouldRerender, setShouldRerender] = useState(false);
+  const [currentPath, setCurrentPath] = useState("/");
   const Rerender = (filename) => {
     setTimeout(() => {
       setShouldRerender(!shouldRerender);
@@ -17,25 +20,65 @@ const Main = () => {
       shouldRerender
     );
   };
+  //Dialogues States
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenFolder, setIsModalOpenFolder] = useState(false);
+  const openFileModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeFileModal = () => {
+    setIsModalOpen(false);
+  };
+  const openFolderModal = () => {
+    setIsModalOpenFolder(true);
+  };
+
+  const closeFolderModal = () => {
+    setIsModalOpenFolder(false);
+  };
   return (
     <div className="flex w-full h-screen">
       {/* Sidebar */}
       <div className="w-1/4 bg-gray-200">
-        <Sidebar />
+        <Sidebar
+          openFileUpload={openFileModal}
+          closeFileUpload={closeFileModal}
+          openCreateFolder={openFolderModal}
+          closeFolderModal={closeFolderModal}
+          shouldRerender={shouldRerender}
+        />
       </div>
 
       {/* Main Content */}
       <div className="flex-grow flex flex-col">
         {/* File Upload */}
         <div className="w-full p-4 bg-gray-100 border-b border-gray-300">
-          <FileUpload onMouseEnter={Rerender} Rerender={Rerender} />
+          <FileUpload Rerender={Rerender} currentPath={currentPath} />
         </div>
 
         {/* List Files */}
         <div className="flex-grow p-4 overflow-y-auto bg-gray-50">
-          <ListFiles shouldRerender={shouldRerender} />
+          <ListFiles
+            shouldRerender={shouldRerender}
+            currentPath={currentPath}
+            setCurrentPath={setCurrentPath}
+          />
         </div>
       </div>
+      <UploadFileModal
+        isOpen={isModalOpen}
+        onClose={closeFileModal}
+        className="modal-overlay modal"
+      />
+      <CreateFolderModal
+        isOpenFolder={isModalOpenFolder}
+        onCloseFolder={closeFolderModal}
+        className="modal-overlay modal"
+        Rerender={Rerender}
+        currentPath={currentPath}
+      />
     </div>
   );
 };
