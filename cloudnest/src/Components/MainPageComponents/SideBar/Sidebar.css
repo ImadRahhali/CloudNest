@@ -1,0 +1,18 @@
+.Side {
+  background-color: black;
+}
+
+.folder-button {
+  background-color: #070a27;
+  border: solid 1px #00498d;
+}
+.folder-button:hover {
+  background-color: #1f223c;
+}
+.file-button {
+  background-color: #02386e;
+  border: solid 1px #070a27;
+}
+.file-button:hover {
+  background-color: black;
+}

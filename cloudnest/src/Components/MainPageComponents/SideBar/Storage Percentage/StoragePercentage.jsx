@@ -19,7 +19,7 @@ const StoragePercentage = ({ shouldRerender }) => {
 
         // Convert bytes to GB
         const totalSizeGB = totalSize / (1024 * 1024 * 1024);
-        const storagePercentage = (totalSizeGB / 10) * 100;
+        const storagePercentage = (totalSizeGB / 0.1) * 100;
         setStorageUsed(totalSizeGB);
         setStoragePercentage(storagePercentage);
       } catch (error) {
@@ -58,7 +58,7 @@ const StoragePercentage = ({ shouldRerender }) => {
       <h2 className="text-2xl font-bold mb-4">Storage Usage</h2>
       <div className="storage-details">
         <p className="storage-info">
-          Storage Used: {storageUsed.toFixed(2)} GB
+          Storage Used: {(storageUsed.toFixed(5) * 1024).toFixed(2)} MB/ 100MB
         </p>
         <p className="storage-info">
           Storage Percentage: {storagePercentage.toFixed(2)}%
@@ -67,7 +67,10 @@ const StoragePercentage = ({ shouldRerender }) => {
       <div className="storage-bar">
         <div
           className="filled-bar"
-          style={{ width: `${storagePercentage}%` }}
+          style={{
+            width: `${storagePercentage.toFixed(2)}%`,
+            color: `${"#00498d"}`,
+          }}
         ></div>
       </div>
     </div>

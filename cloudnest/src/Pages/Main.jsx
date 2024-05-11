@@ -5,7 +5,7 @@ import ListFiles from "../Components/MainPageComponents/User Files/ListFiles";
 import { useState } from "react";
 import UploadFileModal from "../Components/Modals/Upload File modal/UploadFileModal";
 import CreateFolderModal from "../Components/Modals/Create Folder Modal/CreateFolderModal";
-
+import "./Main.css";
 const Main = () => {
   const [shouldRerender, setShouldRerender] = useState(false);
   const [currentPath, setCurrentPath] = useState("/");
@@ -39,7 +39,7 @@ const Main = () => {
     setIsModalOpenFolder(false);
   };
   return (
-    <div className="flex w-full h-screen">
+    <div className="main flex w-full h-screen">
       {/* Sidebar */}
       <div className="w-1/4 bg-gray-200">
         <Sidebar
@@ -52,18 +52,19 @@ const Main = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow flex flex-col">
+      <div className="main flex-grow flex flex-col">
         {/* File Upload */}
-        <div className="w-full p-4 bg-gray-100 border-b border-gray-300">
+        <div className="main container-file-upload w-full p-4 bg-gray-100">
           <FileUpload Rerender={Rerender} currentPath={currentPath} />
         </div>
 
         {/* List Files */}
-        <div className="flex-grow p-4 overflow-y-auto bg-gray-50">
+        <div className="main flex-grow p-4 overflow-y-auto">
           <ListFiles
             shouldRerender={shouldRerender}
             currentPath={currentPath}
             setCurrentPath={setCurrentPath}
+            Rerender={Rerender}
           />
         </div>
       </div>

@@ -22,8 +22,13 @@ import {
 import { FiDownload, FiTrash2, FiFolderPlus, FiArrowUp } from "react-icons/fi";
 import { MdLink } from "react-icons/md";
 import { IconContext } from "react-icons";
-
-const ListFiles = ({ shouldRerender, currentPath, setCurrentPath }) => {
+import "./userfiles.css";
+const ListFiles = ({
+  shouldRerender,
+  currentPath,
+  setCurrentPath,
+  Rerender,
+}) => {
   const auth = getAuth();
   const storage = getStorage();
   const [copied, setCopied] = useState(false);
@@ -115,6 +120,7 @@ const ListFiles = ({ shouldRerender, currentPath, setCurrentPath }) => {
       }
       await deleteObject(fileRef);
       setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
+      Rerender();
     } catch (error) {
       console.error("Error removing file or folder:", error);
     }
@@ -155,7 +161,7 @@ const ListFiles = ({ shouldRerender, currentPath, setCurrentPath }) => {
   };
 
   return (
-    <div className="max-w-screen-md mx-auto p-4">
+    <div className="files max-w-screen-md mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Your Files</h2>
         <div>
@@ -174,10 +180,10 @@ const ListFiles = ({ shouldRerender, currentPath, setCurrentPath }) => {
         {files.map((file, index) => (
           <div
             key={`file-${index}`}
-            className="flex items-center border-b border-gray-200 py-2"
+            className="flex items-center border-b file-linepy-2 pb-4"
           >
             <IconContext.Provider
-              value={{ size: "1.5rem", className: "text-gray-600 mr-4" }}
+              value={{ size: "1.5rem", className: "icon mr-4" }}
             >
               {renderFileIcon(file)}
             </IconContext.Provider>
@@ -186,15 +192,15 @@ const ListFiles = ({ shouldRerender, currentPath, setCurrentPath }) => {
               {file.type === "file" && (
                 <>
                   <FiDownload
-                    className="text-gray-400 cursor-pointer hover:text-gray-600 mr-2"
+                    className="text-gray-400 cursor-pointer icon mr-2"
                     onClick={() => handleDownload(file.name)}
                   />
                   <MdLink
-                    className="text-gray-400 cursor-pointer hover:text-gray-600 mr-2"
+                    className="text-gray-400 cursor-pointer icon mr-2"
                     onClick={() => handleShare(file.name)}
                   />
                   <FiTrash2
-                    className="text-gray-400 cursor-pointer hover:text-gray-600"
+                    className="text-gray-400 cursor-pointer icon"
                     onClick={() => handleRemove(file)}
                   />
                 </>

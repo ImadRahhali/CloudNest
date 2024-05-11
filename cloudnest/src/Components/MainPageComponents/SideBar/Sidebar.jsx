@@ -1,6 +1,9 @@
 import React from "react";
 import StoragePercentage from "./Storage Percentage/StoragePercentage";
-
+import "./Sidebar.css";
+import logo from "../../../assets/CloudNestLogo.png";
+import { auth } from "../../../firebase";
+import { Avatar } from "@mui/material";
 const Sidebar = ({
   openFileUpload,
   closFileModal,
@@ -8,12 +11,23 @@ const Sidebar = ({
   closeCreateFolder,
   shouldRerender,
 }) => {
+  console.log(auth.currentUser);
   return (
-    <div className="h-full w-full bg-gray-200 w-1/4 p-4 flex flex-col justify-between">
+    <div className="Side h-full w-full w-1/4 p-4 flex flex-col justify-between">
       {/* Home Section */}
       <div>
         <div className="mb-4">
-          <h2 className="text-lg font-bold mb-2">Home</h2>
+          <img src={logo} className="w-52 h-12 mb-2"></img>
+          <h2 className="flex ">
+            <Avatar
+              alt="User Avatar"
+              src={auth.currentUser.photoUrl}
+              sx={{ width: 60, height: 60 }}
+            />
+            <span className="flex justify-center items-center ml-2">
+              Hello {auth.currentUser.displayName}
+            </span>
+          </h2>
           <StoragePercentage shouldRerender={shouldRerender} />
           {/* Add links or other content for the home section if needed */}
         </div>
@@ -22,7 +36,7 @@ const Sidebar = ({
       {/* Upload File and Create Folder Buttons */}
       <div>
         <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full mb-2"
+          className="file-button text-white font-semibold py-2 px-4 rounded w-full mb-2"
           onClick={() => {
             openFileUpload();
           }}
@@ -31,7 +45,7 @@ const Sidebar = ({
         </button>
 
         <button
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full"
+          className="folder-button text-white font-semibold py-2 px-4 rounded w-full"
           onClick={() => {
             openCreateFolder();
           }}
