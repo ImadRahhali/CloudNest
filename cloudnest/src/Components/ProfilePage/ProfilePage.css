@@ -11,6 +11,11 @@
     rgba(15, 16, 66, 1) 99%
   );
 }
+.logo-profile {
+  position: absolute; /* Positioning the logo absolutely */
+  top: 0; /* Aligning to the top */
+  left: 0; /* Aligning to the left */
+}
 
 .profile-container {
   width: 100%;
@@ -33,7 +38,7 @@
 .profile-header h1 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #00498D;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -58,6 +63,7 @@
   margin-left: 5%;
 font-size: large;
 font-weight: 500;
+color: aliceblue;
 }
 
 .profile-detail {
@@ -69,9 +75,13 @@ font-weight: 500;
 
 .profile-detail .icon {
   margin-right: 10px;
+    color: #00498D;
+
 }
 .profile-detail .edit-icon {
   margin-left: 10px;
+    color: #00498D;
+
 }
 
 .profile-detail input[type="password"] {
@@ -81,7 +91,6 @@ font-weight: 500;
 
 .profile-detail button {
   padding: 5px 10px;
-  background-color: #007bff;
   color: #00498D;
   font-weight: bold;
   border: none;
@@ -89,12 +98,30 @@ font-weight: 500;
   cursor: pointer;
 }
 
-.profile-detail button:hover {
-  background-color: #0056b3;
+.t{
+  color: #fff !important;
+  font-style: italic;
+  font-weight: 200 !important; 
 }
 .detail-label {
   margin-right: 10px;
   font-weight: bold;
+  color:#00498D;
+}
+.inputs1{
+  background-color: #00498D;
+  border-radius: 5rem;
+  padding-left: 0.5rem;
+  color: aliceblue;
+}
+.bg-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px); /* Adjust the blur intensity as needed */
+  z-index: 100; /* Ensure it's above other content */
 }
 
 .save-icon,
@@ -102,6 +129,8 @@ font-weight: 500;
   cursor: pointer;
   font-size: 20px;
   margin-left: 10px;
+  color:#00498D;
+
 }
 .profile1-button{
   bottom:130px; /* Adjust as needed */

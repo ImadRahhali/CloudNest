@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth, googleProvider, facebookProvider, firestore } from '../../firebase'; 
-import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
+import {FacebookAuthProvider, createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import {setDoc,doc, addDoc, query, where, collection, getDocs } from "firebase/firestore"; 
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
@@ -36,11 +36,14 @@ function SignUp({ switchToSignIn }) {
       console.log("User signed up:", user);
       console.log("Username:", auth.currentUser.displayName);
     } catch (error) {
-      if (error.message.includes('password')) {
+      if (error.message.includes('Firebase: Password should be at least 6 characters (auth/weak-password).')) {
         setError("Password is weak")
+        console.log(error.message)
+
       }
-      if (error.message.includes('email')) {
+      if (error.message.includes('Firebase: Error (auth/invalid-email).')) {
         setError("Email format is incorrect")
+        console.log(error.message)
       }
     }
   };
@@ -77,35 +80,43 @@ function SignUp({ switchToSignIn }) {
       console.log("Username:", usernameToSet);
     } catch (error) {
       setError(error.message);
+      
+    }
+  };
+  const handleFacebookSignUp = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+  
+      // Wait for the user's information to be available
+      await updateProfile(user, { displayName: user.displayName });
+  
+      // Check if the user has a valid email before proceeding
+      if (!user.email || !isValidEmail(user.email)) {
+        throw new Error("Invalid email format or email not provided");
+      }
+  
+      const usernameToSet = suggestedUsername(user);
+      await setDoc(doc(firestore, "users", user.uid), {
+        username: usernameToSet,
+        email: user.email,
+        provider: "facebook",
+      });
+  
+      console.log('User Registered Successfully!!', user);
+      console.log('User email:', user.email);
+    } catch (error) {
+      setError(error.message);
     }
   };
   
-  
-  
-  const handleFacebookSignUp =() => {
-  signInWithPopup(auth,facebookProvider)
-  .then((result) => {
-    // The signed-in user info.
-    const user = result.user;
 
-    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    const credential = facebookProvider.credentialFromResult(result);
-    const accessToken = credential.accessToken;
-
-    // IdP data available using getAdditionalUserInfo(result)
-    // ...
-  })
-  .catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-
-    // ...
-  });
-}
+  const isValidEmail = (email) => {
+    // Simple email format validation (can be improved based on your requirements)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
   
   const suggestedUsername = (user) => {
     const provider = user.providerData[0].providerId;
