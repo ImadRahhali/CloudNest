@@ -1,0 +1,19 @@
+.snackbar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #02386e;
+  color: white;
+  padding: 15px;
+  border-radius: 4px;
+  z-index: 9999;
+  transition: transform 0.5s ease-in-out;
+}
+
+.snackbar.show {
+  transform: translateY(0);
+}
+
+.snackbar.hide {
+  transform: translateY(-100%);
+}
