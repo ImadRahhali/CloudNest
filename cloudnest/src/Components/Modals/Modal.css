@@ -12,7 +12,7 @@
 
 .modal {
   width: 60%;
-  background-color: white;
+  background-color: black;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
@@ -44,6 +44,8 @@
   touch-action: manipulation;
   vertical-align: middle;
   white-space: nowrap;
+  background-color: #02386e;
+  border: solid 1px #070a27;
 }
 
 .Close-Button:focus:not(:focus-visible):not(.focus-visible) {

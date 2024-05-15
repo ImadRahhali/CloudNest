@@ -1,12 +1,16 @@
 import React from "react";
-import Sidebar from "../Components/MainPageComponents/SideBar/Sidebar";
-import FileUpload from "../Components/MainPageComponents/FileUpload/FileUpload";
-import ListFiles from "../Components/MainPageComponents/User Files/ListFiles";
+import Sidebar from "../../Components/MainPageComponents/SideBar/Sidebar";
+import FileUpload from "../../Components/MainPageComponents/FileUpload/FileUpload";
+import ListFiles from "../../Components/MainPageComponents/User Files/ListFiles";
 import { useState } from "react";
-import UploadFileModal from "../Components/Modals/Upload File modal/UploadFileModal";
-import CreateFolderModal from "../Components/Modals/Create Folder Modal/CreateFolderModal";
+import UploadFileModal from "../../Components/Modals/Upload File modal/UploadFileModal";
+import CreateFolderModal from "../../Components/Modals/Create Folder Modal/CreateFolderModal";
+import Snackbar from "../../Components/Snackbar/Snackbar";
 import "./Main.css";
 const Main = () => {
+  /*Snackbar state management */
+  const [showSnackbar, setShowSnackbar] = useState(false);
+
   const [shouldRerender, setShouldRerender] = useState(false);
   const [currentPath, setCurrentPath] = useState("/");
   const Rerender = (filename) => {
@@ -66,6 +70,12 @@ const Main = () => {
             setCurrentPath={setCurrentPath}
             Rerender={Rerender}
           />
+          {showSnackbar && (
+            <Snackbar
+              showSnackbar={showSnackbar}
+              setShowSnackbar={setShowSnackbar}
+            />
+          )}
         </div>
       </div>
       <UploadFileModal

@@ -33,7 +33,10 @@ function CreateFolder({ Rerender, currentPath }) {
         placeholder="Enter folder name"
         className="folder-input"
       />
-      <button onClick={handleCreateFolder} className="create-folder-button">
+      <button
+        onClick={handleCreateFolder}
+        className="create-folder-button rounded"
+      >
         Create Folder
       </button>
       <p className="message">{message}</p>

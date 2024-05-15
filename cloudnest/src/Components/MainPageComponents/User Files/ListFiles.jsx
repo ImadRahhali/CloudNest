@@ -6,7 +6,6 @@ import {
   listAll,
   getDownloadURL,
   deleteObject,
-  uploadBytes,
 } from "firebase/storage";
 import {
   FaFolder,
@@ -19,10 +18,19 @@ import {
   FaFileVideo,
   FaFileAlt,
 } from "react-icons/fa";
-import { FiDownload, FiTrash2, FiFolderPlus, FiArrowUp } from "react-icons/fi";
+import {
+  FiDownload,
+  FiTrash2,
+  FiFolderPlus,
+  FiArrowUp,
+  FiShare,
+} from "react-icons/fi";
 import { MdLink } from "react-icons/md";
 import { IconContext } from "react-icons";
 import "./userfiles.css";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+
 const ListFiles = ({
   shouldRerender,
   currentPath,
@@ -33,6 +41,7 @@ const ListFiles = ({
   const storage = getStorage();
   const [copied, setCopied] = useState(false);
   const [files, setFiles] = useState([]);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -98,7 +107,11 @@ const ListFiles = ({
 
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
+      setShowSnackbar(true);
+      setTimeout(() => {
+        setShowSnackbar(false);
+        setCopied(false);
+      }, 3000);
     } catch (error) {
       console.error("Error sharing file:", error);
     }
@@ -123,6 +136,65 @@ const ListFiles = ({
       Rerender();
     } catch (error) {
       console.error("Error removing file or folder:", error);
+    }
+  };
+
+  const handleDownloadFolder = async (folderName) => {
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("User not authenticated.");
+
+      const folderRef = ref(
+        storage,
+        `files/${user.uid}/${currentPath}${folderName}`
+      );
+      const folderItems = await listAll(folderRef);
+      const jszip = new JSZip();
+
+      // Iterate over each item in the folder
+      await Promise.all(
+        folderItems.items.map(async (item) => {
+          // Get the download URL for the file
+          const url = await getDownloadURL(item);
+
+          // Extract the file name from the full path
+          const fileName = item.name.split("/").pop();
+
+          // Add the file URL to the zip archive
+          jszip.file(fileName, url);
+        })
+      );
+
+      // Generate the zip file asynchronously
+      const zipBlob = await jszip.generateAsync({ type: "blob" });
+
+      // Save the zip file
+      saveAs(zipBlob, `${folderName}.zip`);
+    } catch (error) {
+      console.error("Error downloading folder:", error);
+    }
+  };
+
+  const handleShareFolder = async (folderName) => {
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("User not authenticated.");
+
+      const folderRef = ref(
+        storage,
+        `files/${user.uid}/${currentPath}${folderName}`
+      );
+      const url = await getDownloadURL(folderRef);
+
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setShowSnackbar(true);
+      setTimeout(() => {
+        setShowSnackbar(false);
+        setCopied(false);
+      }, 3000);
+    } catch (error) {
+      console.error("Error sharing folder:", error);
     }
   };
 
@@ -180,7 +252,7 @@ const ListFiles = ({
         {files.map((file, index) => (
           <div
             key={`file-${index}`}
-            className="flex items-center border-b file-linepy-2 pb-4"
+            className="flex items-center border-b file-line py-2 pb-4"
           >
             <IconContext.Provider
               value={{ size: "1.5rem", className: "icon mr-4" }}
@@ -206,17 +278,31 @@ const ListFiles = ({
                 </>
               )}
               {file.type === "folder" && (
-                <FiFolderPlus
-                  className="text-gray-400 cursor-pointer hover:text-gray-600"
-                  onClick={() => handleNavigate(file.name)}
-                />
+                <>
+                  <FiFolderPlus
+                    className="text-gray-400 cursor-pointer hover:text-gray-600 mr-2"
+                    onClick={() => handleNavigate(file.name)}
+                  />
+                  <FiDownload
+                    className="text-gray-400 cursor-pointer icon mr-2"
+                    onClick={() => handleDownloadFolder(file.name)}
+                  />
+                  <MdLink
+                    className="text-gray-400 cursor-pointer icon mr-2"
+                    onClick={() => handleShareFolder(file.name)}
+                  />
+                  <FiTrash2
+                    className="text-gray-400 cursor-pointer icon"
+                    onClick={() => handleRemove(file)}
+                  />
+                </>
               )}
             </div>
           </div>
         ))}
       </div>
-      {copied && (
-        <div className="text-green-600">Link copied to clipboard!</div>
+      {showSnackbar && (
+        <div className="snackbar">Link copied to clipboard!</div>
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 .folder-manager {
+  color: white;
   max-width: 300px;
   margin: 0 auto;
   padding: 20px;
@@ -8,6 +9,7 @@
 }
 
 .folder-input {
+  color: black;
   width: 100%;
   margin-bottom: 10px;
   padding: 8px;
@@ -16,19 +18,13 @@
 }
 
 .create-folder-button {
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.create-folder-button:hover {
-  background-color: #45a049;
+  background-color: #02386e;
+  border: solid 1px #070a27;
+  width: 130px;
+  height: 30px;
 }
 
 .message {
   margin-top: 10px;
-  color: #333;
+  color: white;
 }
