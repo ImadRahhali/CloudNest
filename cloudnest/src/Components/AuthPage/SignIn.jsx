@@ -17,13 +17,11 @@ function SignIn({ switchToSignUp }) {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        console.log("user logged : ", userCredential.user)
+        console.log("username ", auth.currentUser.displayName);
         const user = userCredential.user;
-        console.log("user logged : ", user);
-        const token = user.accessToken; // This is the authentication token
-        // Store the token in local storage
-        localStorage.setItem("firebaseAuthToken", token);
-        console.log(localStorage.getItem("firebaseAuthToken"));
-        navigate("/feed");
+        localStorage.setItem('user', JSON.stringify(user));
+        navigate('/profile');
       })
       .catch((error) => {
         setError(error.message);
@@ -34,7 +32,9 @@ function SignIn({ switchToSignUp }) {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         console.log("user logged with Google: ", result.user);
-        navigate("/feed");
+        const user = result.user;
+        localStorage.setItem('user', JSON.stringify(user));
+        navigate('/profile');
       })
       .catch((error) => {
         setError(error.message);
@@ -45,7 +45,9 @@ function SignIn({ switchToSignUp }) {
     signInWithPopup(auth, facebookProvider)
       .then((result) => {
         console.log("user logged with Facebook: ", result.user);
-        navigate("/feed");
+        const user = result.user;
+        localStorage.setItem('user', JSON.stringify(user));
+        navigate('/profile');
       })
       .catch((error) => {
         setError(error.message);
@@ -87,26 +89,18 @@ function SignIn({ switchToSignUp }) {
         </button>
       </form>
       <div className="ml-1">
-        <div className="mb-2">
-          <button class="social-b" onClick={handleGoogleSignIn}>
-            <img
-              class="w-6 h-6"
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              loading="lazy"
-              alt="google logo"
-            />
-            <span>Login with Google</span>
-          </button>
-        </div>
-        <button class="social-b mb-2" onClick={handleFacebookSignIn}>
-          <img src={facebooklogin} class="h-6 w-6 mr-2" />
-          <span>Login with Facebook</span>
-        </button>
-      </div>
-      <span className="text-white">Don't have an account yet? </span>
-      <button className="text-third font-bold" onClick={switchToSignUp}>
-        Register{" "}
-      </button>
+      <div className='mb-2'>
+    <button class="social-b" onClick={handleGoogleSignIn}>
+        <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"/>
+        <span>Login with Google</span>
+    </button>
+</div>
+<button class="social-b mb-2" onClick={handleFacebookSignIn}>
+    <img src={facebooklogin} alt='facebookIcon' class="h-6 w-6 mr-2" />
+    <span>Login with Facebook</span>
+</button>
+      </div >
+      <span className="text-white">Don't have an account yet? </span><button className='text-third font-bold' onClick={switchToSignUp}>Register </button>
     </div>
   );
 }

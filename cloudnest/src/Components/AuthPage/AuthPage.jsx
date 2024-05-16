@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
-import styles from "../../style"; // Import the styles object
+import styles from "../../style";
 import "./authCss.css"
 import { logo } from '../../assets';
 function AuthPage() {

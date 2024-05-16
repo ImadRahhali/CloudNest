@@ -8,11 +8,10 @@ const PlansCard = ({ title, characteristics }) => (
     </h4>
     <ul className="font-poppins font-normal text-[18px] leading-[32.4px] text-white mb-5">
       {characteristics.map((item, index) => {
-        const { icon: IconComponent } = plansicons[index]; // Get the corresponding icon component
+        const { icon: IconComponent } = plansicons[index]; 
         return (
           <li key={index} className="flex items-center mb-2">
-            <IconComponent className="w-[24px] h-[24px] mr-2 text-custom-blue" /> {/* Custom color class */}
-            {item}
+            <IconComponent className="w-[24px] h-[24px] mr-2 text-custom-blue" /> 
           </li>
         );
       })}

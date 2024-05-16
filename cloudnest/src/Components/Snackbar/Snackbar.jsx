@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./Snackbar.css";
 
-const Snackbar = ({ showSnackbar, setShowSnackbar }) => {
+const Snackbar = ({ showSnackbar, setShowSnackbar , toDisplay}) => {
   useEffect(() => {
     const timeout = setTimeout(() => setShowSnackbar(false), 3000);
     return () => clearTimeout(timeout);
@@ -9,7 +9,7 @@ const Snackbar = ({ showSnackbar, setShowSnackbar }) => {
 
   return (
     { showSnackbar } && (
-      <div className="snackbar">Link copied to clipboard!</div>
+      <div className="snackbar">{toDisplay}</div>
     )
   );
 };
