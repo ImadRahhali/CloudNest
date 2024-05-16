@@ -174,7 +174,6 @@ const ListFiles = ({
       console.error("Error downloading folder:", error);
     }
   };
-
   const handleShareFolder = async (folderName) => {
     try {
       const user = auth.currentUser;
@@ -184,9 +183,12 @@ const ListFiles = ({
         storage,
         `files/${user.uid}/${currentPath}${folderName}`
       );
-      const url = await getDownloadURL(folderRef);
 
-      await navigator.clipboard.writeText(url);
+      // Construct the shared URL with folder path as a parameter
+      const sharedUrl = `http://localhost:3000/public/${user.uid}/${currentPath}${folderName}`;
+
+      // Copy modified URL to clipboard
+      await navigator.clipboard.writeText(sharedUrl);
       setCopied(true);
       setShowSnackbar(true);
       setTimeout(() => {
@@ -197,7 +199,6 @@ const ListFiles = ({
       console.error("Error sharing folder:", error);
     }
   };
-
   const renderFileIcon = (file) => {
     if (file.type === "folder") {
       return <FaFolder />;

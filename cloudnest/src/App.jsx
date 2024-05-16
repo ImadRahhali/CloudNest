@@ -22,6 +22,11 @@ const router = createBrowserRouter([
     element: <Main />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/public/*",
+    element: <Public />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 
 export default router;

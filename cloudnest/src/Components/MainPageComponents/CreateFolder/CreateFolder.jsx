@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { checkFolderExists, createFolder } from "./FirebaseFunctions"; // assuming firebase functions are defined in firebaseFunctions.js
-import "./CreateFolder.css"; // Importing CSS file for styling
+import "./createFolder.css"; // Importing CSS file for styling
 
 function CreateFolder({ Rerender, currentPath }) {
   const [folderName, setFolderName] = useState("");
