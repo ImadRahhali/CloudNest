@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Snackbar ,DialogContentText} from '@mui/material';
+import Loader from '../Loader';
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField ,DialogContentText} from '@mui/material';
 import { FaSave, FaUser, FaEnvelope, FaLock, FaEdit } from 'react-icons/fa';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import EditIcon from '@mui/icons-material/Edit';
 import { storage } from "./../../firebase";
 import { auth, firestore } from '../../firebase';
 import { logo } from '../../assets';
+import Snackbar from '../Snackbar/Snackbar';
 import {
   ref,
   uploadBytes,
@@ -29,6 +31,10 @@ const ProfilePage = () => {
   const [selectedPlan, setSelectedPlan] = useState('Normal Plan');
   const [showPremiumEditWindow, setShowPremiumEditWindow] = useState(false); // Manage premium edit window visibility
   const editRef = useRef(null); // Ref for the edit input
+  const [loading, setLoading] = useState(false);
+  const [showSnackbar,setShowSnackbar] = useState(false);
+  const toDisplay = "Profile Edited Succesfully";
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -111,13 +117,14 @@ const ProfilePage = () => {
         setUser({ ...user, displayName: username, email: email });
         localStorage.setItem('user', JSON.stringify({ ...user, displayName: username, email: email }));
 
-        alert('Changes saved successfully!');
         setIsEditingUsername(false);
         setIsEditingEmail(false);
         setIsEditingPassword(false);
+        setShowSnackbar(true);
         console.log("Document written with ID: ", docRef.id);
         console.log("Username:", currentUser.displayName);
         console.log("Email:", currentUser.email);
+        
       }
     } catch (error) {
       console.error('Error updating Firestore:', error.message);
@@ -129,8 +136,8 @@ const ProfilePage = () => {
       const inputElement = document.createElement('input');
       inputElement.type = 'file';
       inputElement.accept = 'image/*';
-
       inputElement.onchange = async (event) => {
+        setLoading(true);
         const imageUploaded = event.target.files[0];
         const imageRef = ref(storage, `images/${user.uid}/${imageUploaded.name}`);
         const snapshot = await uploadBytes(imageRef, imageUploaded);
@@ -140,21 +147,17 @@ const ProfilePage = () => {
         setUser({ ...user, photoURL: imageUrl });
         setImageUrl(imageUrl);
         localStorage.setItem('user', JSON.stringify({ ...user, photoURL: imageUrl }));
+        setLoading(false);
       };
       inputElement.click();
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error('Error uploading image:', error);
       alert('Error uploading image. Please try again.');
     }
   };
 
-  const handleOpenPremiumEditWindow = async () => {
-    setShowPremiumEditWindow(true); // Show premium edit window
-  };
-
-  const handleClosePremiumEditWindow = () => {
-    setShowPremiumEditWindow(false); // Close premium edit window
-  };
   const handleOpenProfileDialog = () => {
     setOpenProfileDialog(true);
   };
@@ -170,8 +173,10 @@ const ProfilePage = () => {
 
   return (
     <div className="bg-primary-profile min-h-screen">
-            {showPremiumEditWindow && <div className="bg-blur">
-              hello</div>}
+        <div>
+        {loading && <Loader loading={loading} />}
+      </div>
+      {showSnackbar && <Snackbar showSnackbar={showSnackbar} setShowSnackbar={setShowSnackbar} toDisplay={toDisplay}/>}
       <img src={logo} alt="CloudNest" className="logo-profile w-[220px] h-[50px] ml-5" />
       <div className="profile-container">
         <div className="profile-form">

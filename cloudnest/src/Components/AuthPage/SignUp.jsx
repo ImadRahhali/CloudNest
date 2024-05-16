@@ -6,13 +6,16 @@ import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import { facebooklogin } from "../../assets";
+import Snackbar from '../Snackbar/Snackbar';
 
 function SignUp({ switchToSignIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
-
+  const [showSnackbar,setShowSnackbar] = useState(false);
+  const toDisplay = "User Registered Sucessfully";
+  
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
@@ -31,7 +34,10 @@ function SignUp({ switchToSignIn }) {
         email: email,
         provider: "email/password",
       });
-  
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setShowSnackbar(true);
       console.log("Document written with ID: ", user.uid);
       console.log("User signed up:", user);
       console.log("Username:", auth.currentUser.displayName);
@@ -76,6 +82,8 @@ function SignUp({ switchToSignIn }) {
         email: email,
         provider: "google",
       });
+      
+      setShowSnackbar(true);
       console.log("Document written with ID: ", docRef.id);
       console.log("Username:", usernameToSet);
     } catch (error) {
@@ -103,7 +111,7 @@ function SignUp({ switchToSignIn }) {
         email: user.email,
         provider: "facebook",
       });
-  
+      setShowSnackbar(true);
       console.log('User Registered Successfully!!', user);
       console.log('User email:', user.email);
     } catch (error) {
@@ -127,6 +135,7 @@ function SignUp({ switchToSignIn }) {
 
   return (
     <div className="auth-form">
+      {showSnackbar && <Snackbar showSnackbar={showSnackbar} setShowSnackbar={setShowSnackbar} toDisplay={toDisplay}/>}
       <h4 className="font-poppins font-bold text-[28px] leading-[32px] text-custom-blue mb-5 ">Register Now</h4>
       <form onSubmit={handleSignUp}>
         <div className="input-group">
