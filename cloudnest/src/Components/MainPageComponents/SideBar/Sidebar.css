@@ -16,3 +16,7 @@
 .file-button:hover {
   background-color: black;
 }
+button {
+  background-color: #070a27;
+  margin-top: 5px;
+}
