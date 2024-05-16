@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Loader from '../Loader';
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField ,DialogContentText} from '@mui/material';
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
 import { FaSave, FaUser, FaEnvelope, FaLock, FaEdit } from 'react-icons/fa';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import EditIcon from '@mui/icons-material/Edit';
@@ -8,13 +8,9 @@ import { storage } from "./../../firebase";
 import { auth, firestore } from '../../firebase';
 import { logo } from '../../assets';
 import Snackbar from '../Snackbar/Snackbar';
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
-import { updateProfile, verifyBeforeUpdateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateEmail } from "firebase/auth";
+import { updateProfile, updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateEmail } from "firebase/auth";
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -22,47 +18,21 @@ const ProfilePage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [editField, setEditField] = useState(null); // Track which field is being edited
+  const [editField, setEditField] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
-  const [isEditingUsername, setIsEditingUsername] = useState(false); // Define isEditingUsername state
-  const [isEditingEmail, setIsEditingEmail] = useState(false); // Define isEditingEmail state
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState('Normal Plan');
-  const [showPremiumEditWindow, setShowPremiumEditWindow] = useState(false); // Manage premium edit window visibility
-  const editRef = useRef(null); // Ref for the edit input
+  const editRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [showSnackbar,setShowSnackbar] = useState(false);
-  const toDisplay = "Profile Edited Succesfully";
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const toDisplay = "Profile Edited Successfully";
+  const [currentPasswordInput, setCurrentPasswordInput] = useState('');
+  const [openCurrentPasswordDialog, setOpenCurrentPasswordDialog] = useState(false);
 
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Check if the editRef exists and if the click is outside the editRef element
-      if (editRef.current && !editRef.current.contains(event.target)) {
-        // Check which input field is being edited and close it accordingly
-        if (isEditingUsername) {
-          setUsername(user.displayName || ''); // Reset the username input if changes were not saved
-          setIsEditingUsername(false); // Close the username input
-        }
-        if (isEditingEmail) {
-          setEmail(user.email || ''); // Reset the email input if changes were not saved
-          setIsEditingEmail(false); // Close the email input
-        }
-        if (isEditingPassword) {
-          setPassword(''); // Reset the password input if changes were not saved
-          setIsEditingPassword(false); // Close the password input
-        }
-      }
-    };
-  
-    document.addEventListener('mousedown', handleClickOutside);
-  
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [editRef, isEditingUsername, isEditingEmail, isEditingPassword, user]);
-  
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -85,32 +55,27 @@ const ProfilePage = () => {
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const currentUser = auth.currentUser;
       if (currentUser) {
-        // Update profile display name
         await updateProfile(currentUser, { displayName: username });
-
-        // Check if the email needs to be updated
         if (email && email !== currentUser.email) {
-          // Reauthenticate the user before updating email
-          const currentPassword = prompt('Enter your current password:');
-          const credential = EmailAuthProvider.credential(currentUser.email, currentPassword); // Create credential object
-          await reauthenticateWithCredential(currentUser, credential); // Reauthenticate using credential
+          setCurrentPasswordInput('');
+          setOpenCurrentPasswordDialog(true);
+          const credential = EmailAuthProvider.credential(currentUser.email, currentPasswordInput);
+          await reauthenticateWithCredential(currentUser, credential);
+          handleCloseCurrentPasswordDialog();
           await updateEmail(currentUser, email);
-          // Email updated successfully
         }
-
-        // Update password if provided
         if (password) {
-          // Reauthenticate the user before updating password
-          const currentPassword = prompt('Enter your current password:');
-          const credential = EmailAuthProvider.credential(currentUser.email, currentPassword); // Create credential object
-          await reauthenticateWithCredential(currentUser, credential); // Reauthenticate using credential
+          setCurrentPasswordInput('');
+          setOpenCurrentPasswordDialog(true);
+          const credential = EmailAuthProvider.credential(currentUser.email, currentPasswordInput);
+          await reauthenticateWithCredential(currentUser, credential);
+          handleCloseCurrentPasswordDialog();
           await updatePassword(currentUser, password);
-          setPassword(''); // Clear password field
+          setPassword('');
         }
-
-        // Update Firestore document
         const docRef = doc(firestore, "users", currentUser.uid);
         await updateDoc(docRef, { username: username, email: email });
 
@@ -121,10 +86,12 @@ const ProfilePage = () => {
         setIsEditingEmail(false);
         setIsEditingPassword(false);
         setShowSnackbar(true);
+        setEditField('');
+        setLoading(false);
         console.log("Document written with ID: ", docRef.id);
         console.log("Username:", currentUser.displayName);
         console.log("Email:", currentUser.email);
-        
+
       }
     } catch (error) {
       console.error('Error updating Firestore:', error.message);
@@ -167,21 +134,33 @@ const ProfilePage = () => {
   };
 
   const handleConfirmPlan = () => {
-    // Here you can handle the logic for updating the selected plan in your state or database
     setOpenProfileDialog(false);
   };
+  const handleLogOut = () => {
+    localStorage.removeItem('user');
+    window.location.href = '/auth';
+  };
 
+  const handleOpenCurrentPasswordDialog = () => {
+    setOpenCurrentPasswordDialog(true);
+  };
+  
+  const handleCloseCurrentPasswordDialog = () => {
+    setOpenCurrentPasswordDialog(false);
+    setCurrentPasswordInput('');
+  };
   return (
     <div className="bg-primary-profile min-h-screen">
-        <div>
+      <div>
         {loading && <Loader loading={loading} />}
       </div>
-      {showSnackbar && <Snackbar showSnackbar={showSnackbar} setShowSnackbar={setShowSnackbar} toDisplay={toDisplay}/>}
+      {showSnackbar && <Snackbar showSnackbar={showSnackbar} setShowSnackbar={setShowSnackbar} toDisplay={toDisplay} />}
       <img src={logo} alt="CloudNest" className="logo-profile w-[220px] h-[50px] ml-5" />
       <div className="profile-container">
         <div className="profile-form">
           <div className="profile-header">
             <h1>My Profile</h1>
+            <Button className="logout-button" onClick={handleLogOut}>Log Out</Button>
           </div>
           <div className="profile-content">
             <div>
@@ -261,47 +240,75 @@ const ProfilePage = () => {
                   </>
                 )}
               </div>
+
               <div className="profile-detail">
-              <CardMembershipIcon className="detail-label" />
+                <CardMembershipIcon className="detail-label" />
                 <>
                   <span>{selectedPlan}</span>
-                  {/* Premium Plan edit button */}
                   <FaEdit className="edit-icon" onClick={handleOpenProfileDialog} />
                 </>
-            </div>
+              </div>
             </div>
           </div>
-          <Dialog open={openProfileDialog}     PaperProps={{
-      style: {
-        backgroundColor:'#0f1042',
-        color:'#fff'
-      },
-    }} onClose={() => setOpenProfileDialog(false)}>
-        <DialogTitle>Select Plan</DialogTitle>
-        <DialogContent >
-          <DialogContentText className='t' PaperProps={{
-      style: {
-        color:'#fff' 
-      },
-    }}>
-            Please select your plan:
-          </DialogContentText>
-          {/* Buttons for plan selection */}
-          <div>
-            <Button onClick={() => handleSelectPlan('Normal Plan')} variant={selectedPlan === 'Normal Plan' ? 'contained' : 'outlined'}>Normal Plan</Button>
-            <Button onClick={() => handleSelectPlan('Premium Plan')} variant={selectedPlan === 'Premium Plan' ? 'contained' : 'outlined'}>Premium Plan</Button>
-            <Button onClick={() => handleSelectPlan('Super Premium')} variant={selectedPlan === 'Super Premium' ? 'contained' : 'outlined'}>Super Premium</Button>
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenProfileDialog(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleConfirmPlan} color="primary" disabled={!selectedPlan}>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <Dialog open={openCurrentPasswordDialog} PaperProps={{
+            style: {
+              backgroundColor: '#0f1042',
+              color: '#fff'
+            },
+          }} onClose={handleCloseCurrentPasswordDialog}>
+  <DialogTitle>Enter Current Password</DialogTitle>
+  <DialogContent className='t' PaperProps={{
+                style: {
+                  color: '#fff'
+                },
+              }}>
+    <TextField
+      type="password"
+      label="Current Password"
+      value={currentPasswordInput}
+      onChange={(e) => setCurrentPasswordInput(e.target.value)}
+    />
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseCurrentPasswordDialog} color="primary">
+      Cancel
+    </Button>
+    <Button onClick={handleSaveChanges} color="primary">
+      Confirm
+    </Button>
+  </DialogActions>
+</Dialog>
+
+          <Dialog open={openProfileDialog} PaperProps={{
+            style: {
+              backgroundColor: '#0f1042',
+              color: '#fff'
+            },
+          }} onClose={() => setOpenProfileDialog(false)}>
+            <DialogTitle>Select Plan</DialogTitle>
+            <DialogContent >
+              <DialogContentText className='t' PaperProps={{
+                style: {
+                  color: '#fff'
+                },
+              }}>
+                Please select your plan:
+              </DialogContentText>
+              <div>
+                <Button onClick={() => handleSelectPlan('Normal Plan')} variant={selectedPlan === 'Normal Plan' ? 'contained' : 'outlined'}>Normal Plan</Button>
+                <Button onClick={() => handleSelectPlan('Premium Plan')} variant={selectedPlan === 'Premium Plan' ? 'contained' : 'outlined'}>Premium Plan</Button>
+                <Button onClick={() => handleSelectPlan('Super Premium')} variant={selectedPlan === 'Super Premium' ? 'contained' : 'outlined'}>Super Premium</Button>
+              </div>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenProfileDialog(false)} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleConfirmPlan} color="primary" disabled={!selectedPlan}>
+                Confirm
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </div>
     </div>

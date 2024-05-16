@@ -97,7 +97,6 @@ function SignUp({ switchToSignIn }) {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
   
-      // Wait for the user's information to be available
       await updateProfile(user, { displayName: user.displayName });
   
       // Check if the user has a valid email before proceeding
@@ -121,7 +120,6 @@ function SignUp({ switchToSignIn }) {
   
 
   const isValidEmail = (email) => {
-    // Simple email format validation (can be improved based on your requirements)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };

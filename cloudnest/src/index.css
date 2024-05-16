@@ -203,6 +203,6 @@
   font-weight: 900;
   font-style: italic;
   font-family: 'Courier New', Courier, monospace;
-  text-shadow: 2px 2px 4px  #00498D; /* Example shadow with horizontal offset, vertical offset, blur radius, and color */
-  color: #0f1042; /* Desired color */
+  text-shadow: 2px 2px 4px  #00498D; 
+  color: #0f1042; 
 }
