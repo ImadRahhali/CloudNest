@@ -3,7 +3,6 @@ import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "./Components/ErrorPage";
 import AuthPage from "./Components/AuthPage/AuthPage";
 import Main from "./Pages/Main/Main";
-import ProfililePagUploa from "./Components/MainPageComponents/ProfilePage/ProfilileUpload/FilPageUploa";
 import Test from "./Test";
 import Public from "./Pages/publicFolder/public";
 const router = createBrowserRouter([
@@ -17,7 +16,6 @@ const router = createBrowserRouter([
     element: <AuthPage />,
     errorElement: <ErrorPage />,
   },
-
   {
     path: "/feed",
     element: <Main />,
@@ -26,14 +24,13 @@ const router = createBrowserRouter([
   {
     path: "/public/*",
     element: <Public />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/profile",
     element: <ProfilePage/>,
     errorElement: <ErrorPage />,
   },
-
-
 ]);
 
 export default router;
