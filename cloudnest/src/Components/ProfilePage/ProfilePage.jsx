@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import Loader from '../Loader';
 import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
 import { FaSave, FaUser, FaEnvelope, FaLock, FaEdit } from 'react-icons/fa';
@@ -12,6 +12,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
 import { updateProfile, updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateEmail } from "firebase/auth";
 import './ProfilePage.css';
+import {Link,useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const [user, setUser] = useState({});
@@ -24,17 +25,19 @@ const ProfilePage = () => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState('Normal Plan');
+  const [selectedPlan, setSelectedPlan] = useState('Free Plan');
   const editRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const toDisplay = "Profile Edited Successfully";
   const [currentPasswordInput, setCurrentPasswordInput] = useState('');
   const [openCurrentPasswordDialog, setOpenCurrentPasswordDialog] = useState(false);
+  const navigate = useNavigate();
 
 
 
   useEffect(() => {
+    
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
@@ -42,6 +45,7 @@ const ProfilePage = () => {
       setUsername(parsedUser.displayName || '');
       setEmail(parsedUser.email || '');
       setImageUrl(parsedUser.photoURL || '');
+      
     }
   }, []);
 
@@ -136,14 +140,17 @@ const ProfilePage = () => {
   const handleConfirmPlan = () => {
     setOpenProfileDialog(false);
   };
-  const handleLogOut = () => {
-    localStorage.removeItem('user');
-    window.location.href = '/auth';
+  const handleLogOut = async () => {
+    try {
+      await auth.signOut();
+      localStorage.removeItem('user');
+      navigate("/");
+
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
-  const handleOpenCurrentPasswordDialog = () => {
-    setOpenCurrentPasswordDialog(true);
-  };
   
   const handleCloseCurrentPasswordDialog = () => {
     setOpenCurrentPasswordDialog(false);
@@ -155,12 +162,15 @@ const ProfilePage = () => {
         {loading && <Loader loading={loading} />}
       </div>
       {showSnackbar && <Snackbar showSnackbar={showSnackbar} setShowSnackbar={setShowSnackbar} toDisplay={toDisplay} />}
-      <img src={logo} alt="CloudNest" className="logo-profile w-[220px] h-[50px] ml-5" />
+      <div className='header-profile'>
+      <img src={logo} alt="CloudNest" className=" w-[220px] h-[50px] ml-5" />
+      <Link to='/feed'><Button >View Feed</Button></Link>
+      </div>
       <div className="profile-container">
         <div className="profile-form">
           <div className="profile-header">
             <h1>My Profile</h1>
-            <Button className="logout-button" onClick={handleLogOut}>Log Out</Button>
+            <Button  onClick={handleLogOut}>Log Out</Button>
           </div>
           <div className="profile-content">
             <div>
@@ -295,9 +305,9 @@ const ProfilePage = () => {
                 Please select your plan:
               </DialogContentText>
               <div>
-                <Button onClick={() => handleSelectPlan('Normal Plan')} variant={selectedPlan === 'Normal Plan' ? 'contained' : 'outlined'}>Normal Plan</Button>
-                <Button onClick={() => handleSelectPlan('Premium Plan')} variant={selectedPlan === 'Premium Plan' ? 'contained' : 'outlined'}>Premium Plan</Button>
-                <Button onClick={() => handleSelectPlan('Super Premium')} variant={selectedPlan === 'Super Premium' ? 'contained' : 'outlined'}>Super Premium</Button>
+                <Button onClick={() => handleSelectPlan('Free Plan')} variant={selectedPlan === 'Free Plan' ? 'contained' : 'outlined'}>Free Plan</Button>
+                <Button onClick={() => handleSelectPlan('CloudNest PLUS')} variant={selectedPlan === 'CloudNest PLUS' ? 'contained' : 'outlined'}>CloudNest PLUS</Button>
+                <Button onClick={() => handleSelectPlan('CloudNest SUPER')} variant={selectedPlan === 'CloudNest SUPER' ? 'contained' : 'outlined'}>CloudNest SUPER</Button>
               </div>
             </DialogContent>
             <DialogActions>

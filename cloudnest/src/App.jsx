@@ -5,6 +5,7 @@ import AuthPage from "./Components/AuthPage/AuthPage";
 import Main from "./Pages/Main/Main";
 import Test from "./Test";
 import Public from "./Pages/publicFolder/public";
+import ProfilePage from "./Components/ProfilePage/ProfilePage";
 const router = createBrowserRouter([
   {
     path: "/",

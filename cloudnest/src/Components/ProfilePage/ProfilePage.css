@@ -11,11 +11,17 @@
     rgba(15, 16, 66, 1) 99%
   );
 }
-.logo-profile {
-  position: absolute; /* Positioning the logo absolutely */
-  top: 0; /* Aligning to the top */
-  left: 0; /* Aligning to the left */
+
+.header-profile {
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
+
 
 .profile-container {
   width: 100%;
@@ -35,12 +41,18 @@
   border: 3px solid #00498D;
   border-radius: 1rem;
 }
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .profile-header h1 {
   font-size: 24px;
   margin-bottom: 20px;
   color: #fff;
   font-weight: bold;
 }
+
 
 .profile-content {
   display: flex;
@@ -72,6 +84,7 @@ color: aliceblue;
   align-items: center;
   margin-bottom: 10px;
 }
+
 
 .profile-detail .icon {
   margin-right: 10px;

@@ -7,7 +7,6 @@ const plansCharacteristics = [
   ["100GB Storage","Up to 5GB per file", "Advanced Security Features","Personalize dashboard", "Priority Support"],
   ["1TB Storage","Up to 20GB per file", "Enterprise-grade Security","Personalize dashboard", "Account Manager"],
 ];
-
 const Pricing = () => (
   <section id="plans" className={`${styles.paddingY} ${styles.flexCenter} flex-col relative `}>
     <div className="absolute z-[0] w-[60%] h-[60%] -right-[50%] rounded-full blue__gradient bottom-40" />

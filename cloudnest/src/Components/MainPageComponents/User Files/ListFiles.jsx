@@ -43,10 +43,12 @@ const ListFiles = ({
   const [files, setFiles] = useState([]);
   const [showSnackbar, setShowSnackbar] = useState(false);
 
+
+
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const user = auth.currentUser;
+        const user = JSON.parse(localStorage.getItem('user'));
         if (!user) throw new Error("User not authenticated.");
 
         const storageRef = ref(storage, `files/${user.uid}/${currentPath}`);
@@ -80,7 +82,7 @@ const ListFiles = ({
 
   const handleDownload = async (fileName) => {
     try {
-      const user = auth.currentUser;
+      const user = JSON.parse(localStorage.getItem('user'));
       if (!user) throw new Error("User not authenticated.");
 
       const fileRef = ref(
@@ -96,7 +98,7 @@ const ListFiles = ({
 
   const handleShare = async (fileName) => {
     try {
-      const user = auth.currentUser;
+      const user = JSON.parse(localStorage.getItem('user'));
       if (!user) throw new Error("User not authenticated.");
 
       const fileRef = ref(
@@ -119,7 +121,7 @@ const ListFiles = ({
 
   const handleRemove = async (file) => {
     try {
-      const user = auth.currentUser;
+      const user = JSON.parse(localStorage.getItem('user'));
       if (!user) throw new Error("User not authenticated.");
 
       const fileRef = ref(
@@ -127,7 +129,6 @@ const ListFiles = ({
         `files/${user.uid}/${currentPath}${file.name}`
       );
       if (file.type === "folder") {
-        // Delete folder and all its contents
         const fileList = await listAll(fileRef);
         await Promise.all(fileList.items.map((item) => deleteObject(item)));
       }
@@ -141,7 +142,7 @@ const ListFiles = ({
 
   const handleDownloadFolder = async (folderName) => {
     try {
-      const user = auth.currentUser;
+      const user = JSON.parse(localStorage.getItem('user'));
       if (!user) throw new Error("User not authenticated.");
 
       const folderRef = ref(
@@ -151,24 +152,18 @@ const ListFiles = ({
       const folderItems = await listAll(folderRef);
       const jszip = new JSZip();
 
-      // Iterate over each item in the folder
       await Promise.all(
         folderItems.items.map(async (item) => {
-          // Get the download URL for the file
           const url = await getDownloadURL(item);
 
-          // Extract the file name from the full path
           const fileName = item.name.split("/").pop();
 
-          // Add the file URL to the zip archive
           jszip.file(fileName, url);
         })
       );
 
-      // Generate the zip file asynchronously
       const zipBlob = await jszip.generateAsync({ type: "blob" });
 
-      // Save the zip file
       saveAs(zipBlob, `${folderName}.zip`);
     } catch (error) {
       console.error("Error downloading folder:", error);
@@ -176,7 +171,7 @@ const ListFiles = ({
   };
   const handleShareFolder = async (folderName) => {
     try {
-      const user = auth.currentUser;
+      const user = JSON.parse(localStorage.getItem('user'));
       if (!user) throw new Error("User not authenticated.");
 
       const folderRef = ref(
@@ -184,10 +179,8 @@ const ListFiles = ({
         `files/${user.uid}/${currentPath}${folderName}`
       );
 
-      // Construct the shared URL with folder path as a parameter
       const sharedUrl = `http://localhost:3000/public/${user.uid}/${currentPath}${folderName}`;
 
-      // Copy modified URL to clipboard
       await navigator.clipboard.writeText(sharedUrl);
       setCopied(true);
       setShowSnackbar(true);

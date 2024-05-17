@@ -21,7 +21,7 @@ function SignIn({ switchToSignUp }) {
         console.log("username ", auth.currentUser.displayName);
         const user = userCredential.user;
         localStorage.setItem('user', JSON.stringify(user));
-        navigate('/profile');
+        navigate('/feed');
       })
       .catch((error) => {
         setError(error.message);
@@ -34,7 +34,7 @@ function SignIn({ switchToSignUp }) {
         console.log("user logged with Google: ", result.user);
         const user = result.user;
         localStorage.setItem('user', JSON.stringify(user));
-        navigate('/profile');
+        navigate('/feed');
       })
       .catch((error) => {
         setError(error.message);
@@ -47,7 +47,7 @@ function SignIn({ switchToSignUp }) {
         console.log("user logged with Facebook: ", result.user);
         const user = result.user;
         localStorage.setItem('user', JSON.stringify(user));
-        navigate('/profile');
+        navigate('/feed');
       })
       .catch((error) => {
         setError(error.message);
