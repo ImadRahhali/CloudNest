@@ -19,7 +19,9 @@ jobs:
         node-version: '20.12.1' 
 
     - name: Change directory to CloudNest
-      run: cd CloudNest
+      run: |
+        cd CloudNest
+        ls -la # This command is for debugging purposes to list the contents of the directory
 
     - name: Install dependencies
       run: npm install
