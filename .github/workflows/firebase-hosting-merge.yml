@@ -17,3 +17,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLOUDNEST_1 }}
           channelId: live
           projectId: cloudnest-1
+          entryPoint: ./cloudnest
