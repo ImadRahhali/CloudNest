@@ -1,4 +1,4 @@
-name: Build and Deploy to Firebase
+name: Build and Deploy to Firebase Project
 
 on:
   push:
