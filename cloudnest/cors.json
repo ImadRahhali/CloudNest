@@ -1,0 +1,7 @@
+[
+    {
+      "origin": ["https://cloudnest-1.web.app/"],
+      "method": ["GET","POST","PUT","DELETE"],
+      "maxAgeSeconds": 3600
+    }
+  ]
