@@ -17,23 +17,18 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '20.12.1' 
-    - name: Change Directory
-      run: cd cloudnest
-      
+
+    - name: Change directory to CloudNest
+      run: cd CloudNest
+
     - name: Install dependencies
       run: npm install
-      working-directory: ./cloudnest
     - name: Build the project
       run: |
         export CI=false
         npm run build
-      working-directory: ./cloudnest
-
-
 
     - name: Deploy to Firebase
       run: firebase deploy --only hosting
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      working-directory: ./cloudnest
-
