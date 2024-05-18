@@ -30,6 +30,7 @@ import { IconContext } from "react-icons";
 import "./userfiles.css";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import Loader from '../../Loader';
 
 const ListFiles = ({
   shouldRerender,
@@ -42,7 +43,7 @@ const ListFiles = ({
   const [copied, setCopied] = useState(false);
   const [files, setFiles] = useState([]);
   const [showSnackbar, setShowSnackbar] = useState(false);
-
+  const [fetching,setFetching] = useState(false);
 
 
   useEffect(() => {
@@ -63,12 +64,14 @@ const ListFiles = ({
         }));
 
         setFiles([...folderNames, ...fileNames]);
+        setFetching(false);
       } catch (error) {
+        
         console.error("Error fetching files:", error);
       }
     };
-
     fetchFiles();
+
   }, [auth, storage, shouldRerender, currentPath]);
 
   const handleNavigate = (folderName) => {
@@ -228,6 +231,9 @@ const ListFiles = ({
 
   return (
     <div className="files max-w-screen-md mx-auto p-4">
+                  <div>
+        {fetching && <Loader loading={fetching} />}
+      </div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Your Files</h2>
         <div>

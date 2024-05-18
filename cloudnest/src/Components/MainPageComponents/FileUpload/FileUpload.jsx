@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import "./FileUpload.css";
-
+import Loader from '../../Loader';
 const FileUpload = ({ Rerender, currentPath }) => {
   const auth = getAuth();
   const storage = getStorage();
   const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleFileUpload = async (event) => {
     try {
       setUploading(true);
+      setLoading(true);
       const user = auth.currentUser;
       if (!user) throw new Error("User not authenticated.");
 
@@ -25,7 +28,10 @@ const FileUpload = ({ Rerender, currentPath }) => {
 
       // Update files state to include the newly uploaded file
       console.log("File uploaded:", file.name);
+
       Rerender();
+      setLoading(false);
+
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -35,6 +41,9 @@ const FileUpload = ({ Rerender, currentPath }) => {
 
   return (
     <div className="upload-file flex items-center justify-center w-full">
+            <div>
+        {loading && <Loader loading={loading} />}
+      </div>
       <label
         htmlFor="dropzone-file"
         className="upload-file flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 dark:hover:border-gray-500"
