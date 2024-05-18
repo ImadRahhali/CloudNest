@@ -5,7 +5,7 @@ const Snackbar = ({ showSnackbar, setShowSnackbar , toDisplay}) => {
   useEffect(() => {
     const timeout = setTimeout(() => setShowSnackbar(false), 3000);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [setShowSnackbar]);
 
   return (
     { showSnackbar } && (
