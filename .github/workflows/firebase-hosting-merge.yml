@@ -9,11 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          cd cloudnest && ls -la && npm install && export CI=false && npm run build
+          cd cloudnest && npm install && export CI=false && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLOUDNEST_1 }}
           channelId: live
           projectId: cloudnest-1
-          entryPoint: 'cloudnest/firebase.json'
+          entryPoint: 'firebase.json'
