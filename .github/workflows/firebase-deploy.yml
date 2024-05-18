@@ -16,7 +16,10 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20.12.1'  
+        node-version: '20.12.1' 
+
+    - name: Change to the correct directory
+      run: cd cloudnest
 
     - name: Install dependencies
       run: npm install
