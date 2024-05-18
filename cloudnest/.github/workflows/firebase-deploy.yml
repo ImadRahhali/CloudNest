@@ -1,4 +1,4 @@
-name: Build and Deploy to Firebase Project
+name: Build and Deploy to Firebase
 
 on:
   push:
@@ -22,14 +22,17 @@ jobs:
       run: npm install
       working-directory: ./cloudnest
 
-    - name: Build the project with CI=false
+    - name: Build the project
       run: |
         export CI=false
         npm run build
       working-directory: ./cloudnest
+
+
 
     - name: Deploy to Firebase
       run: firebase deploy --only hosting
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       working-directory: ./cloudnest
+
