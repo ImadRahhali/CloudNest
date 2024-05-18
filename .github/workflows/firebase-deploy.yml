@@ -23,11 +23,15 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+      working-directory: ./cloudnest
 
     - name: Build the project
       run: npm run build
+      working-directory: ./cloudnest
+
 
     - name: Deploy to Firebase
       run: firebase deploy --only hosting
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      working-directory: ./cloudnest
