@@ -19,9 +19,14 @@ CloudNest is an application designed for seamless file storage and management. W
   - Tailwind CSS
 - **Backend:**
   - Firebase (Authentication, Firestore Database, Firebase Storage)
-- **Deployment:**
-  - Firebase Hosting
-  - GitHub Actions for CI/CD
+
+## Deployment
+
+CloudNest uses Firebase Hosting and GitHub Actions for automatic deployment and build. Any changes pushed to the main branch trigger a workflow that builds the project and deploys it to Firebase Hosting.
+
+##Progressive Web App
+
+CloudNest leverages service workers to enable offline capabilities and enhance performance, ensuring that users can access their files even without an active internet connection. As a Progressive Web App (PWA), CloudNest offers a seamless, app-like experience on any device, with the added benefit of being installable directly from the browser. Its responsive design, built with Tailwind CSS, ensures that the application adapts beautifully to various screen sizes, providing a user-friendly experience on both desktop and mobile devices.
 
 ## Usage
 
@@ -34,7 +39,15 @@ CloudNest is an application designed for seamless file storage and management. W
    ```sh
    cd cloudnest
 3. Install dependencies then start the server:
-  ```sh
+   ```sh
    npm install
    npm start
+
+### Use the Hosted Version
+
+Access the Live Application at [CloudNest](https://cloudnest-1.web.app
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any changes or enhancements.
    
