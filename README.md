@@ -30,3 +30,11 @@ CloudNest is an application designed for seamless file storage and management. W
 1. Clone the repo:
    ```sh
    git clone https://github.com/yourusername/cloudnest.git
+2. Navigate to the project directory:
+   ```sh
+   cd cloudnest
+3. Install dependencies then start the server:
+  ```sh
+   npm install
+   npm start
+   
