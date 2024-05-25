@@ -60,7 +60,7 @@ CloudNest leverages service workers to enable offline capabilities and enhance p
 
 ### Or Use the Hosted Version
 
-Access the Live Application at [CloudNest](https://cloudnest-1.web.app
+Access the Live Application at [CloudNest](https://cloudnest-1.web.app)
 
 ## Contributing
 
