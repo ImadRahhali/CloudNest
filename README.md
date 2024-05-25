@@ -1,6 +1,11 @@
 # CloudNest
+![Logo](CloudNestLogo.png)
 
-CloudNest is an application designed for seamless file storage and management. With an intuitive interface and powerful backend, CloudNest allows users to securely store, manage, and share their files with ease.
+CloudNest is an innovative application designed for seamless file storage and management, offering users a reliable and efficient solution to handle their digital assets. With its intuitive interface, users can easily navigate through their files, upload new content, and organize everything into neatly structured folders. The powerful backend ensures that all data is stored securely, providing peace of mind for users concerned about the safety of their information. CloudNest also enables effortless file sharing through the generation of public links, making collaboration and information dissemination straightforward and efficient. Whether you need to store documents, images, or any other type of file, CloudNest is built to accommodate your needs, ensuring a smooth and hassle-free experience.
+
+![Landing page1](1.png)
+![Landing page2](2.png)
+
 
 ## Features
 
@@ -12,6 +17,9 @@ CloudNest is an application designed for seamless file storage and management. W
 - **Public Links:** Generate public links for files and folders to share with others.
 - **Storage Limit:** Monitor your storage usage based on your plan.
 
+![Profile1](3.png)
+![profile2](4.png)
+
 ## Technologies Used
 
 - **Frontend:**
@@ -19,14 +27,19 @@ CloudNest is an application designed for seamless file storage and management. W
   - Tailwind CSS
 - **Backend:**
   - Firebase (Authentication, Firestore Database, Firebase Storage)
+  
+![main](7.png)
 
 ## Deployment
 
 CloudNest uses Firebase Hosting and GitHub Actions for automatic deployment and build. Any changes pushed to the main branch trigger a workflow that builds the project and deploys it to Firebase Hosting.
 
-##Progressive Web App
+## Progressive Web App
 
 CloudNest leverages service workers to enable offline capabilities and enhance performance, ensuring that users can access their files even without an active internet connection. As a Progressive Web App (PWA), CloudNest offers a seamless, app-like experience on any device, with the added benefit of being installable directly from the browser. Its responsive design, built with Tailwind CSS, ensures that the application adapts beautifully to various screen sizes, providing a user-friendly experience on both desktop and mobile devices.
+
+![pwa1](pwa-2.png)
+![pwa2](pwa-4.png)
 
 ## Usage
 
@@ -43,7 +56,7 @@ CloudNest leverages service workers to enable offline capabilities and enhance p
    npm install
    npm start
 
-### Use the Hosted Version
+### Or Use the Hosted Version
 
 Access the Live Application at [CloudNest](https://cloudnest-1.web.app
 
