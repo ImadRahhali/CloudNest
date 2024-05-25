@@ -38,8 +38,8 @@ CloudNest uses Firebase Hosting and GitHub Actions for automatic deployment and 
 
 CloudNest leverages service workers to enable offline capabilities and enhance performance, ensuring that users can access their files even without an active internet connection. As a Progressive Web App (PWA), CloudNest offers a seamless, app-like experience on any device, with the added benefit of being installable directly from the browser. Its responsive design, built with Tailwind CSS, ensures that the application adapts beautifully to various screen sizes, providing a user-friendly experience on both desktop and mobile devices.
 
-<div style="gap: 20 px;">
-  <img src="ReadMePictures/pwa-2.jpeg" height="400" style="margin: 10px;" />   <img src="ReadMePictures/pwa-4.jpeg" height="400" />
+<div style="gap: 100 px;">
+  <img src="ReadMePictures/pwa-2.jpeg" height="400" style="margin: 50px;" />   <img src="ReadMePictures/pwa-4.jpeg" height="400" />
 
 </div>
 
