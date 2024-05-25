@@ -1,7 +1,7 @@
 # CloudNest
 ![Logo](ReadMePictures/CloudNestLogo.png)
 
-CloudNest is an innovative application designed for seamless file storage and management, offering users a reliable and efficient solution to handle their digital assets. With its intuitive interface, users can easily navigate through their files, upload new content, and organize everything into neatly structured folders. The powerful backend ensures that all data is stored securely, providing peace of mind for users concerned about the safety of their information. CloudNest also enables effortless file sharing through the generation of public links, making collaboration and information dissemination straightforward and efficient. Whether you need to store documents, images, or any other type of file, CloudNest is built to accommodate your needs, ensuring a smooth and hassle-free experience.
+CloudNest is an innovative application designed for seamless file storage and management, offering users a reliable and efficient solution to handle their digital assets. With its intuitive interface, users can easily navigate through their files, upload new content, and organize everything into neatly structured folders. Whether you need to store documents, images, or any other type of file, CloudNest is built to accommodate your needs, ensuring a smooth and hassle-free experience.
 
 ![Landing page1](ReadMePictures/1.png)
 ![Landing page2](ReadMePictures/2.png)
@@ -28,7 +28,7 @@ CloudNest is an innovative application designed for seamless file storage and ma
 - **Backend:**
   - Firebase (Authentication, Firestore Database, Firebase Storage)
   
-![main](7.png)
+![main](ReadMePictures/7.png)
 
 ## Deployment
 
